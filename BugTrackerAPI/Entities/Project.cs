@@ -16,5 +16,6 @@ namespace BugTrackerAPI.Entities
         public DateTime DateCreated { get; set; } = DateTime.Now;
         public ICollection<Ticket> Tickets { get; set; }
         public ICollection<User> Members { get; set; }
+        public int UserId { get; set; }
     }
 }

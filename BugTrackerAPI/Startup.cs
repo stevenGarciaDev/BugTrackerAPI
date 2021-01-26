@@ -39,8 +39,10 @@ namespace BugTrackerAPI
             services.AddIdentityCore<User>(opt =>
             {
                 opt.Password.RequireNonAlphanumeric = false;
+                opt.Password.RequiredLength = 6;
                 opt.Password.RequireUppercase = false;
                 opt.Password.RequireDigit = false;
+                opt.Password.RequireLowercase = false;
                 opt.User.RequireUniqueEmail = true;
                 opt.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+/ ";
             })

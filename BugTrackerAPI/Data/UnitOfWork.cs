@@ -16,11 +16,17 @@ namespace BugTrackerAPI.Data
             Users = new UserRepository(_context);
             Projects = new ProjectRepository(_context);
             Tickets = new TicketRepository(_context);
+            ProjectMembers = new ProjectMemberRepository(_context);
+            ProjectTickets = new ProjectTicketRepository(_context);
+            UserAssignedTickets = new UserAssignedTicketRepository(_context);
         }
 
         public IUserRepository Users { get; private set; }
         public IProjectRepository Projects { get; set; }
         public ITicketRepository Tickets { get; set; }
+        public IProjectMemberRepository ProjectMembers { get; set; }
+        public IProjectTicketRepository ProjectTickets { get; set; }
+        public IUserAssignedTicketRepository UserAssignedTickets { get; set; }
 
         public async Task<bool> SaveChangesAsync()
         {

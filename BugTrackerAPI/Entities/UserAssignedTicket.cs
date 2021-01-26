@@ -1,10 +1,10 @@
 namespace BugTrackerAPI.Entities
 {
-    public class ProjectMember
+    public class UserAssignedTicket
     {
-        public int ProjectId { get; set; }
-        public Project Project { get; set; }
         public int UserId { get; set; }
         public User User { get; set; }
+        public int TicketId { get; set; }
+        public Ticket Ticket { get; set; }
     }
 }

@@ -11,7 +11,9 @@ namespace BugTrackerAPI.Entities
         public string JobTitle { get; set; }
         public string ImageUrl { get; set; }
         public ICollection<UserRole> UserRoles { get; set; }
+        public string Permissions { get; set; }  = "Normal";
         public ICollection<Ticket> Tickets { get; set; }
-        public ICollection<Project> Projects { get; set; }
+        public ICollection<ProjectMember> ProjectMembers { get; set; }
+        public ICollection<UserAssignedTicket> UserAssignedTickets { get; set; }
     }
 }

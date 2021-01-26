@@ -24,5 +24,7 @@ namespace BugTrackerAPI.Entities
         public User User { get; set; }
         public int ProjectId { get; set; }
         public Project Project { get; set; }
+        public ICollection<ProjectTicket> ProjectTickets { get; set; }
+        public ICollection<UserAssignedTicket> UserAssignedTickets { get; set; }
     }
 }

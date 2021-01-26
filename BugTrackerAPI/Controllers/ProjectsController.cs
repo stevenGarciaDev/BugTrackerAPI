@@ -57,10 +57,22 @@ namespace BugTrackerAPI.Controllers
 
             _unitOfWork.Projects.Add(project);
 
-            // add to ProjectMember, add project id and user id 
             var result = await _unitOfWork.SaveChangesAsync();
 
-            if (result == true) 
+            List<ProjectMember> projectMembers = new List<ProjectMember>();
+            foreach(var id in projectDto.MemberIds)
+            {
+                var newProjectMember = new ProjectMember
+                {
+                    UserId = id,
+                    ProjectId = project.Id,
+                };
+                projectMembers.Add(newProjectMember);
+            }
+            _unitOfWork.ProjectMembers.AddRange(projectMembers);
+            var addMembersResult = await _unitOfWork.SaveChangesAsync();
+            
+            if (result == true && addMembersResult == true) 
             {
                 return Ok(project);
             }

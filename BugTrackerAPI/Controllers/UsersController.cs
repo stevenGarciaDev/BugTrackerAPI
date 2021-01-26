@@ -1,4 +1,7 @@
-﻿using BugTrackerAPI.Interfaces;
+﻿using AutoMapper;
+using BugTrackerAPI.DataTransferObjects;
+using BugTrackerAPI.Entities;
+using BugTrackerAPI.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -12,9 +15,11 @@ namespace BugTrackerAPI.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public UsersController(IUnitOfWork unitOfWork)
+        public UsersController(IUnitOfWork unitOfWork, IMapper mapper)
         {
+            _mapper = mapper;
             _unitOfWork = unitOfWork;
         }
         
@@ -30,6 +35,22 @@ namespace BugTrackerAPI.Controllers
         public string Get(int id)
         {
             return "value";
+        }
+
+        [HttpGet("member/{username}")]
+        public ActionResult<ProjectMemberDto> GetByUsername(string username)
+        {
+            var user = _unitOfWork.Users
+                .Find(u => u.UserName.ToLower() == username.ToLower())
+                .SingleOrDefault();
+
+            if (user == null)
+            {
+                return BadRequest("Username not found");
+            }
+
+            var projectMemberDto = _mapper.Map<ProjectMemberDto>(user);
+            return Ok(projectMemberDto);
         }
 
         // PUT api/<UsersController>/5

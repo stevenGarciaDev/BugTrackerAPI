@@ -33,22 +33,32 @@ namespace BugTrackerAPI.Controllers
         {
             if (await UserExists(registerDto.UserName)) return BadRequest("Username is taken.");
 
+            var existingUser = await _userManager.Users.SingleOrDefaultAsync(u => u.Email == registerDto.Email);
+            if (existingUser != null) return Unauthorized("Use a different email address.");
+
             var user = _mapper.Map<User>(registerDto);
             user.UserName = registerDto.UserName.ToLower();
 
             var result = await _userManager.CreateAsync(user, registerDto.Password);
             
-            if (!result.Succeeded) return BadRequest(result.Errors);
+            if (!result.Succeeded) return BadRequest("Invalid registration attempt.");
 
             var roleResult = await _userManager.AddToRoleAsync(user, registerDto.JobTitle);
 
-            if (!roleResult.Succeeded) return BadRequest(result.Errors);
+            if (!roleResult.Succeeded) return BadRequest("Invalid registration attempt.");
+
+            var permissions = "";
+            if (user.JobTitle == "Developer") {
+                permissions = "Normal";
+            } else {
+                permissions = "Manager";
+            }
 
             return new UserDto
             {
                 UserName = user.UserName,
                 Email = user.Email,
-                Permissions = "Normal",
+                Permissions = permissions,
                 JobTitle = user.JobTitle,
                 Token = await _tokenService.CreateToken(user)
             };
@@ -59,12 +69,12 @@ namespace BugTrackerAPI.Controllers
         {
            var user = await _userManager.Users.SingleOrDefaultAsync(u => u.Email == loginDto.Email);
 
-           if (user == null) return Unauthorized("User not found");
+           if (user == null) return Unauthorized("User with that email not found.");
 
            var result = await _signInManager
             .CheckPasswordSignInAsync(user, loginDto.Password, false);
 
-            if (!result.Succeeded) return Unauthorized();
+            if (!result.Succeeded) return Unauthorized("Invalid login attempt.");
 
             return new UserDto
             {

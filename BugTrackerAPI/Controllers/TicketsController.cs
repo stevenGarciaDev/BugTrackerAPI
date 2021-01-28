@@ -1,4 +1,8 @@
-﻿using BugTrackerAPI.Interfaces;
+﻿using AutoMapper;
+using BugTrackerAPI.DataTransferObjects;
+using BugTrackerAPI.Entities;
+using BugTrackerAPI.Interfaces;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -12,10 +16,12 @@ namespace BugTrackerAPI.Controllers
     public class TicketsController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public TicketsController(IUnitOfWork unitOfWork)
+        public TicketsController(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
         // GET: api/<TicketsController>
@@ -34,8 +40,35 @@ namespace BugTrackerAPI.Controllers
 
         // POST api/<TicketsController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<ActionResult<TicketDto>> Post([FromBody] NewTicketDto newTicketDto)
         {
+            var project = _unitOfWork.Projects
+                .Find(p => p.Name.ToLower() == newTicketDto.ProjectName.ToLower())
+                .SingleOrDefault();
+            if (project == null) return BadRequest("Project Not Found");
+
+            var ticket = new Ticket
+            {
+                Title = newTicketDto.Title,
+                Description = newTicketDto.Description,
+                Priority = newTicketDto.Priority,
+                Type = newTicketDto.Type,
+                Status = "New",
+                UserId = newTicketDto.CreatedByUserId,
+                ProjectId = project.Id
+            };
+            _unitOfWork.Tickets.Add(ticket);
+            var result = await _unitOfWork.SaveChangesAsync();
+
+            var projectTicket = new ProjectTicket { ProjectId = project.Id, TicketId = ticket.Id };
+            _unitOfWork.ProjectTickets.Add(projectTicket);
+            var projectTicketResult = await _unitOfWork.SaveChangesAsync();
+
+            if (result == true && projectTicketResult == true) {
+                var ticketDto = _mapper.Map<TicketDto>(ticket);
+                return Ok(ticketDto);
+            }
+            return StatusCode(StatusCodes.Status500InternalServerError);
         }
 
         // PUT api/<TicketsController>/5

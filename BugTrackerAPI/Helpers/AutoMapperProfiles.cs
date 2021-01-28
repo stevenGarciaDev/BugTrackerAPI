@@ -11,6 +11,7 @@ namespace BugTrackerAPI.Helpers
             CreateMap<RegisterDto, User>();
             CreateMap<ProjectDto, Project>();
             CreateMap<User, ProjectMemberDto>();
+            CreateMap<Ticket, TicketDto>();
         }
     }
 }

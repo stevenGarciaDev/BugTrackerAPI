@@ -44,10 +44,26 @@ namespace BugTrackerAPI.Controllers
             return Ok(project);
         }
 
+        [HttpGet("members/{projectId}")]
+        public async Task<ActionResult<IEnumerable<ProjectMemberDto>>> GetMembersInAProject(int projectId)
+        {
+            var members = await _unitOfWork.ProjectMembers.GetMembersInAProject(projectId);
+
+            return Ok(members);
+        }
+
+        [HttpGet("user/{userId}")]
+        public async Task<ActionResult<IEnumerable<BaseProjectDto>>> GetProjectsForUser(int userId)
+        {
+            var projects = await _unitOfWork.ProjectMembers.GetProjectsForUser(userId);
+
+            return Ok(projects);
+        }
+
         // POST api/<ProjectsController>
-        [Authorize(Roles = "Project Manager")]
+        // [Authorize(Roles = "Project Manager")]
         [HttpPost]
-        public async Task<ActionResult<Project>> Post([FromBody] ProjectDto projectDto)
+        public async Task<ActionResult<BaseProjectDto>> Post([FromBody] ProjectDto projectDto)
         {
             var projectName = projectDto.Name.ToLower();
             var existingProject = _unitOfWork.Projects.Find(p => p.Name.ToLower() == projectName);
@@ -60,6 +76,7 @@ namespace BugTrackerAPI.Controllers
             var result = await _unitOfWork.SaveChangesAsync();
 
             List<ProjectMember> projectMembers = new List<ProjectMember>();
+            projectMembers.Add(new ProjectMember { UserId = projectDto.UserId, ProjectId = project.Id });
             foreach(var id in projectDto.MemberIds)
             {
                 var newProjectMember = new ProjectMember
@@ -74,7 +91,13 @@ namespace BugTrackerAPI.Controllers
             
             if (result == true && addMembersResult == true) 
             {
-                return Ok(project);
+                return Ok(new BaseProjectDto
+                {
+                    Id = project.Id,
+                    Name = project.Name,
+                    Description = project.Description,
+                    DateCreated = project.DateCreated,
+                });
             }
 
             return StatusCode(StatusCodes.Status500InternalServerError);

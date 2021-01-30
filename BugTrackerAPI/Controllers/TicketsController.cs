@@ -33,9 +33,37 @@ namespace BugTrackerAPI.Controllers
 
         // GET api/<TicketsController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<ActionResult<TicketDto>> Get(int id)
         {
-            return "value";
+            var ticket = await _unitOfWork.Tickets.FindByIdAsync(id);
+            var ticketDto = _mapper.Map<TicketDto>(ticket);
+            return Ok(ticketDto);
+        }
+
+        // GET api/<TicketsController>/5
+        [HttpGet("user/{userId}")]
+        public async Task<ActionResult<IEnumerable<TicketDto>>> GetTicketsForAUser(int userId)
+        {
+            var tickets = await _unitOfWork.Tickets.GetAllTicketsForAUser(userId);
+            return Ok(tickets);
+        }
+
+        // GET api/<TicketsController>project//5
+        [HttpGet("project/{projectId}")]
+        public async Task<ActionResult<IEnumerable<TicketDto>>> GetTicketsForProject(int projectId)
+        {
+            var tickets = await _unitOfWork.Tickets.GetTicketsInAProject(projectId);
+
+            return Ok(tickets);
+        }
+
+        // GET api/<TicketsController>assigned/5
+        [HttpGet("assigned/{ticketId}")]
+        public ActionResult<TicketDto> GetAssignedUserForTicket(int ticketId)
+        {
+            var tickets = _unitOfWork.Tickets.GetTicketWithAssignedUser(ticketId);
+
+            return Ok(tickets);
         }
 
         // POST api/<TicketsController>
@@ -72,9 +100,24 @@ namespace BugTrackerAPI.Controllers
         }
 
         // PUT api/<TicketsController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut("{ticketId}")]
+        public async Task<ActionResult<TicketDto>> Put(int ticketId, [FromBody] TicketDto updatedTicket)
         {
+            var ticket = await _unitOfWork.Tickets.FindByIdAsync(ticketId);
+
+            ticket.Type = updatedTicket.Type;
+            ticket.Priority = updatedTicket.Priority;
+            ticket.Status = updatedTicket.Status;
+            ticket.UserId = updatedTicket.UserId;
+
+            var result = await _unitOfWork.SaveChangesAsync();
+
+            if (result == true) {
+                var updatedTicketDto = _mapper.Map<TicketDto>(ticket);
+                return Ok(updatedTicketDto);
+            } else {
+                return StatusCode(StatusCodes.Status500InternalServerError); 
+            }
         }
 
         // DELETE api/<TicketsController>/5

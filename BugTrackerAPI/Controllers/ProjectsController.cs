@@ -40,7 +40,7 @@ namespace BugTrackerAPI.Controllers
         [HttpGet("{projectId}")]
         public async Task<ActionResult<IEnumerable<Project>>> Get(int projectId)
         {
-            var project = await _unitOfWork.Projects.GetAsync(projectId);
+            var project = await _unitOfWork.Projects.FindByIdAsync(projectId);
             return Ok(project);
         }
 

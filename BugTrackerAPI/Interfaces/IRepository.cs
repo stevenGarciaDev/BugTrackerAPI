@@ -7,7 +7,6 @@ namespace BugTrackerAPI.Interfaces
 {
     public interface IRepository<TEntity> where TEntity : class
     {
-        Task<TEntity> GetAsync(int id);
         Task<IEnumerable<TEntity>> GetAllAsync();
         Task<TEntity> FindByIdAsync(int id);
         IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate);

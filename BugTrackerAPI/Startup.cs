@@ -3,6 +3,7 @@ using BugTrackerAPI.Data;
 using BugTrackerAPI.Entities;
 using BugTrackerAPI.Helpers;
 using BugTrackerAPI.Interfaces;
+using BugTrackerAPI.Middleware;
 using BugTrackerAPI.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -79,10 +80,20 @@ namespace BugTrackerAPI
                 opt.AddPolicy("Member", policy => policy.RequireRole("Admin", "Project Manager", "Developer"));
             });
 
-            services.AddDbContext<BugTrackerDbContext>(options =>
+            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production")
             {
-                options.UseSqlServer(Configuration.GetConnectionString("BugTrackerContext"));
-            });
+                services.AddDbContext<BugTrackerDbContext>(options =>
+                {
+                    options.UseSqlServer(Configuration.GetConnectionString("BugTrackerContextProd"));
+                });
+            }
+            else
+            {
+                services.AddDbContext<BugTrackerDbContext>(options =>
+                {
+                    options.UseSqlServer(Configuration.GetConnectionString("BugTrackerContextDev"));
+                });
+            }
 
             services.AddControllers();
         }
@@ -90,19 +101,21 @@ namespace BugTrackerAPI
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseMiddleware<ExceptionMiddleware>();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+            } else if (env.IsProduction()) {
+                app.UseHttpsRedirection();
             }
-
-            // app.UseHttpsRedirection();
 
             app.UseRouting();
 
             app.UseCors(policy => policy.AllowAnyHeader()
                 .AllowAnyMethod()
                 .AllowCredentials()
-                .WithOrigins("http://localhost:3000"));
+                .WithOrigins(Configuration["ClientOrigin"]));
 
             app.UseAuthentication();
             app.UseAuthorization();

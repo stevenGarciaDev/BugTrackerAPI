@@ -23,11 +23,11 @@ The controllers utilized include an AccountsController, ProjectsController, Tick
 
 The skills I demonstrate in this project include the following.
 
-* Implement ASP.NET Core API endpoints for a React client to make request to
-* Use interfaces to implement the Repository pattern and the Unit of Work pattern to achieve decoupling
-* Use Fluent API to specify the database relationships between resources
-* Use LINQ and Entity Framework Core as the Object Relational Mapper to a SQL Server database
-* Deploy to Azure and setup CI/CD with Azure Pipelines through the Classic Editor
+- Implement ASP.NET Core API endpoints for a React client to make request to
+- Use interfaces to implement the Repository pattern and the Unit of Work pattern to achieve decoupling
+- Use Fluent API to specify the database relationships between resources
+- Use LINQ and Entity Framework Core as the Object Relational Mapper to a SQL Server database
+- Deploy to Azure and setup CI/CD with Azure Pipelines through the Classic Editor
 
 ## Structure of Code
 
@@ -49,5 +49,5 @@ Thank you for checking out my project.
 
 Steven Garcia
 
-* Website: [https://stevengarciadev.github.io/](https://stevengarciadev.github.io/)
-* LinkedIn: [https://www.linkedin.com/in/stevengarciadev/](https://www.linkedin.com/in/stevengarciadev/)
+- Website: [https://stevengarcia.netlify.app](https://stevengarcia.netlify.app)
+- LinkedIn: [https://www.linkedin.com/in/stevengarciadev/](https://www.linkedin.com/in/stevengarciadev/)

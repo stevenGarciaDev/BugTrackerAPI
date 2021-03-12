@@ -1,12 +1,9 @@
 ﻿using AutoMapper;
 using BugTrackerAPI.DataTransferObjects;
-using BugTrackerAPI.Entities;
 using BugTrackerAPI.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace BugTrackerAPI.Controllers
 {
@@ -30,13 +27,6 @@ namespace BugTrackerAPI.Controllers
             return new string[] { "value1", "value2" };
         }
 
-        // GET api/<UsersController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
         [HttpGet("member/{username}")]
         public ActionResult<ProjectMemberDto> GetByUsername(string username)
         {
@@ -51,18 +41,6 @@ namespace BugTrackerAPI.Controllers
 
             var projectMemberDto = _mapper.Map<ProjectMemberDto>(user);
             return Ok(projectMemberDto);
-        }
-
-        // PUT api/<UsersController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<UsersController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
         }
     }
 }

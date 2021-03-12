@@ -24,13 +24,6 @@ namespace BugTrackerAPI.Controllers
             _mapper = mapper;
         }
 
-        // GET: api/<TicketsController>
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
         // GET api/<TicketsController>/5
         [HttpGet("{id}")]
         public async Task<ActionResult<TicketDto>> Get(int id)
@@ -118,12 +111,6 @@ namespace BugTrackerAPI.Controllers
             } else {
                 return StatusCode(StatusCodes.Status500InternalServerError); 
             }
-        }
-
-        // DELETE api/<TicketsController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
         }
     }
 }

@@ -50,6 +50,15 @@ namespace BugTrackerAPI.Controllers
             return Ok(tickets);
         }
 
+        [HttpGet("all-projects/{userId}")]
+        public async Task<ActionResult<IEnumerable<TicketDto>>> GetAllTicketsForUserProjects(int userId)
+        {
+            var projects = await _unitOfWork.ProjectMembers.GetProjectsForUser(userId);
+            var allTickets = await _unitOfWork.ProjectTickets.GetAllTicketsForProjects(projects);
+
+            return Ok(allTickets);
+        }
+
         // GET api/<TicketsController>assigned/5
         [HttpGet("assigned/{ticketId}")]
         public ActionResult<TicketDto> GetAssignedUserForTicket(int ticketId)
@@ -85,7 +94,8 @@ namespace BugTrackerAPI.Controllers
             _unitOfWork.ProjectTickets.Add(projectTicket);
             var projectTicketResult = await _unitOfWork.SaveChangesAsync();
 
-            if (result == true && projectTicketResult == true) {
+            if (result == true && projectTicketResult == true)
+            {
                 var ticketDto = _mapper.Map<TicketDto>(ticket);
                 return Ok(ticketDto);
             }
@@ -105,11 +115,14 @@ namespace BugTrackerAPI.Controllers
 
             var result = await _unitOfWork.SaveChangesAsync();
 
-            if (result == true) {
+            if (result == true)
+            {
                 var updatedTicketDto = _mapper.Map<TicketDto>(ticket);
                 return Ok(updatedTicketDto);
-            } else {
-                return StatusCode(StatusCodes.Status500InternalServerError); 
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
     }

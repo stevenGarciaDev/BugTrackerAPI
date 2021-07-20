@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BugTrackerAPI", "BugTrackerAPI\BugTrackerAPI.csproj", "{B0B49AEB-B55C-45D0-A712-C4976D996AAE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BugTrackerAPI.Tests", "BugTrackerAPI.Tests\BugTrackerAPI.Tests.csproj", "{264DA286-71E0-424A-A891-ECEC4F789928}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{B0B49AEB-B55C-45D0-A712-C4976D996AAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B0B49AEB-B55C-45D0-A712-C4976D996AAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B0B49AEB-B55C-45D0-A712-C4976D996AAE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{264DA286-71E0-424A-A891-ECEC4F789928}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{264DA286-71E0-424A-A891-ECEC4F789928}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{264DA286-71E0-424A-A891-ECEC4F789928}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{264DA286-71E0-424A-A891-ECEC4F789928}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

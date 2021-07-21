@@ -134,10 +134,13 @@ namespace BugTrackerAPI
 
             app.UseRouting();
 
+            string clientOrigin = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production" ?
+                "ClientOrigin" : "ClientOriginDev";
+
             app.UseCors(policy => policy.AllowAnyHeader()
                 .AllowAnyMethod()
                 .AllowCredentials()
-                .WithOrigins(Configuration["ClientOriginDev"]));
+                .WithOrigins(Configuration[clientOrigin]));
 
             app.UseAuthentication();
             app.UseAuthorization();

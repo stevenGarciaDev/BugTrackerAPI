@@ -35,7 +35,7 @@ namespace BugTrackerAPI
                 var logger = services.GetRequiredService<ILogger<Program>>();
                 logger.LogError(ex, "An error occurred during migration");
             }
-            
+
             await host.RunAsync();
         }
 
@@ -43,7 +43,10 @@ namespace BugTrackerAPI
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>();
+                    var port = Environment.GetEnvironmentVariable("PORT");
+
+                    webBuilder.UseStartup<Startup>()
+                        .UseUrls("http://*:" + port);
                 });
     }
 }

@@ -19,7 +19,7 @@ namespace BugTrackerAPI.Controllers
             _mapper = mapper;
             _unitOfWork = unitOfWork;
         }
-        
+
         // GET: api/<UsersController>
         [HttpGet]
         public IEnumerable<string> Get()

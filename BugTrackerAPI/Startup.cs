@@ -80,7 +80,7 @@ namespace BugTrackerAPI
                 opt.AddPolicy("Member", policy => policy.RequireRole("Admin", "Project Manager", "Developer"));
             });
 
-            //Console.WriteLine(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"));
+            Console.WriteLine(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"));
 
             if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production")
             {
@@ -119,6 +119,8 @@ namespace BugTrackerAPI
 
             string clientOrigin = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production" ?
                 "ClientOrigin" : "ClientOriginDev";
+
+            Console.WriteLine($"The clientOrigin is {Configuration[clientOrigin]}");
 
             app.UseCors(policy => policy.AllowAnyHeader()
                 .AllowAnyMethod()

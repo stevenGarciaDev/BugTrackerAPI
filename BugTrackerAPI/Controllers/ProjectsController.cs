@@ -68,7 +68,7 @@ namespace BugTrackerAPI.Controllers
             var projectName = projectDto.Name.ToLower();
             var existingProject = _unitOfWork.Projects.Find(p => p.Name.ToLower() == projectName);
             if (existingProject.Any()) return BadRequest("That Project Name is already taken.");
-            
+
             var project = _mapper.Map<Project>(projectDto);
 
             _unitOfWork.Projects.Add(project);
@@ -77,7 +77,7 @@ namespace BugTrackerAPI.Controllers
 
             List<ProjectMember> projectMembers = new List<ProjectMember>();
             projectMembers.Add(new ProjectMember { UserId = projectDto.UserId, ProjectId = project.Id });
-            foreach(var id in projectDto.MemberIds)
+            foreach (var id in projectDto.MemberIds)
             {
                 var newProjectMember = new ProjectMember
                 {
@@ -88,8 +88,8 @@ namespace BugTrackerAPI.Controllers
             }
             _unitOfWork.ProjectMembers.AddRange(projectMembers);
             var addMembersResult = await _unitOfWork.SaveChangesAsync();
-            
-            if (result == true && addMembersResult == true) 
+
+            if (result == true && addMembersResult == true)
             {
                 return Ok(new BaseProjectDto
                 {
